@@ -10,13 +10,13 @@ import time
 
 # Go to http://apps.twitter.com and create an app.
 # The consumer key and secret will be generated for you after
-consumer_key="9Bix7oCZz8TyC7hsjnRSiBmfr"
-consumer_secret="RCdJg1UNkDFFAns9j9hYKQe0agO97asBBP4VVVeciICZANmzQW"
+consumer_key=""
+consumer_secret=""
 
 # After the step above, you will be redirected to your app's page.
 # Create an access token under the the "Your access token" section
-access_token="180419137-qeoBTFNlpPj1PCZZuW01Q4Ckl8oTI2aXK7eBkxAF"
-access_token_secret="LhqHARMJQgX1HXnMQuSj2BizgxPZgKrBdyAJtTVVJv0X7"
+access_token=""
+access_token_secret=""
 
 class StdOutListener(StreamListener):
     """ A listener handles tweets are the received from the stream.
