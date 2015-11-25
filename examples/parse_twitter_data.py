@@ -3,6 +3,7 @@ import sys, os
 import json
 import csv
 
+
 def parse_json_data(data):
 
     csv_file = open('/Users/alanseciwa/Desktop/clean_data-TWEETONLY-2.csv', 'w')
@@ -26,11 +27,15 @@ def parse_json_data(data):
                 #coordinates = jd['coordinates']
                 #places = jd['place']
 
+                tweets_encode = tweets.encode('utf-8')
+                #clean = tweets_encode.remove("b'", "")
 
-                writer.writerow([tweets])
+                print(tweets_encode)
+
+                writer.writerow([tweets_encode])
                 #writer.writerow((screen_name, tweet, followers_count, geo, coordinates, places))
                 #print(screen_name)
-                print(tweets)
+                #print(tweets_encode)
             except:
                 #print('Error')
                 pass
@@ -40,7 +45,8 @@ def parse_json_data(data):
 
 def main():
 
-    tweet_data = '/Users/alanseciwa/Desktop/Independent_Study/Raw_dataR/gop-debate-sep16-2.json'
+    #tweet_data = '/Users/alanseciwa/Desktop/Independent_Study/Raw_data/gop-debate-sep16-2.json'
+    tweet_data = '/Users/alanseciwa/Desktop/Independent_Study/Raw_data/gop-debate-sep16-2.json'
 
     parse_json_data(tweet_data)
 

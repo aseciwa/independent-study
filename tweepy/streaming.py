@@ -159,7 +159,7 @@ class ReadBuffer(object):
                 return self._pop(length)
             read_len = max(self._chunk_size, length - len(self._buffer))
             #self._buffer += self._stream.read(read_len)
-            self._buffer += self._stream.read(read_len).decode('ascii') # Add this line to try and resolve "can't convert 'bytes' to object to str implicitly"
+            self._buffer += self._stream.read(read_len).decode('ascii') # .decode('ascii') Add this line to try and resolve "can't convert 'bytes' to object to str implicitly"
 
     def read_line(self, sep='\n'):
         start = 0
