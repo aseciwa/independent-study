@@ -1,0 +1,6 @@
+__author__ = 'alanseciwa'
+
+consumer_key="OsVDGp73BvRl6HA4Nlzq5Lfse"
+consumer_secret="JzOipQdIGtmJW1nJ7JrJc2DrX3TQAYbMrEW5j3SlQQjsNh2eKk"
+access_token="180419137-oBfsbYA7EzaoWexvPaZMhMZsn3jkZaT2H7cYMqGm"
+access_token_secret="nhJXTtIvpKtweKtzBlyJdBC7nAYL71mRR9j1hvtP7PR8K"

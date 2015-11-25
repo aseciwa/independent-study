@@ -5,27 +5,8 @@ from __future__ import absolute_import, print_function
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
-import time
+from examples.private_keys import consumer_key, consumer_secret, access_token, access_token_secret
 
-# Go to http://apps.twitter.com and create an app.
-# The consumer key and secret will be generated for you after
-<<<<<<< HEAD
-consumer_key="OsVDGp73BvRl6HA4Nlzq5Lfse"
-consumer_secret="JzOipQdIGtmJW1nJ7JrJc2DrX3TQAYbMrEW5j3SlQQjsNh2eKk"
-
-# After the step above, you will be redirected to your app's page.
-# Create an access token under the the "Your access token" section
-access_token="180419137-oBfsbYA7EzaoWexvPaZMhMZsn3jkZaT2H7cYMqGm"
-access_token_secret="nhJXTtIvpKtweKtzBlyJdBC7nAYL71mRR9j1hvtP7PR8K"
-=======
-consumer_key=""
-consumer_secret=""
-
-# After the step above, you will be redirected to your app's page.
-# Create an access token under the the "Your access token" section
-access_token=""
-access_token_secret=""
->>>>>>> b294bbd0a62e05074c98d5b737568bc67841e4d0
 
 class StdOutListener(StreamListener):
     """ A listener handles tweets are the received from the stream.
@@ -44,7 +25,6 @@ class StdOutListener(StreamListener):
         
         except BaseException as e:
             print('Failed on data: %s' % str(e))
-            time.sleep(11)
 
 
     def on_error(self, status):
