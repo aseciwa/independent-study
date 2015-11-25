@@ -1,4 +1,6 @@
 __author__ = 'alanseciwa'
+# Reference: Raj Kesavan @ http://www.rajk.me
+
 import datetime
 import json
 import sys
