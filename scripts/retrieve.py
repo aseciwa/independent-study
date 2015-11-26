@@ -41,11 +41,15 @@ def tweet_to_dict(tweet, candidate):
         'place': tweet.place,
         'retweet_count': tweet.retweet_count,
         'text': tweet.text,
+        'user_created_at': tweet.user.created_at,
+        'user_statuses_count': tweet.user.statuses_count,
         'user_location': tweet.user.location,
         'user_name': tweet.user.name,
         'user_screen_name': tweet.user.screen_name,
         'user_time_zone': tweet.user.time_zone,
-        'user_followers_count': tweet.user.followers_count
+        'user_followers_count': tweet.user.followers_count,
+        'user_follower_ratio': float(tweet.user.followers_count) / float(tweet.user.friends_count),
+        'user_description': tweet.user.description
     }
 
 
@@ -65,7 +69,7 @@ if __name__ == '__main__':
 
     # specify the amount of tweets to collect per candidate
     # e.g. ~$ python retrieve.py 100
-    number_per_candidate = int(sys.argv[1])
+    number_per_candidate = 1 #int(sys.argv[1])
     print(number_per_candidate)
 
     # path to results directory
