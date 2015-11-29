@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from textblob import TextBlob
 from elasticsearch import Elasticsearch
 
-from examples.spam_detection import SpamBotDetection
+from scripts.spam_detection import SpamBotDetection
 es = Elasticsearch()
 
 def check_obj(c):

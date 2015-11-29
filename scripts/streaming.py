@@ -5,7 +5,7 @@ from __future__ import absolute_import, print_function
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
-from examples.private_keys import consumer_key, consumer_secret, access_token, access_token_secret
+from private.private_keys import consumer_key, consumer_secret, access_token, access_token_secret
 
 
 class StdOutListener(StreamListener):

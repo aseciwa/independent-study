@@ -6,9 +6,11 @@ import json
 import sys
 import pandas as pd
 import tweepy
-from scripts.candidate_list import clist
-from private.private_keys import consumer_key, consumer_secret, access_token, access_token_secret
-from scripts.spam_detection import SpamBotDetection
+from textblob import TextBlob
+
+from candidate_list import clist
+from private_keys import consumer_key, consumer_secret, access_token, access_token_secret
+from spam_detection import SpamBotDetection
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
@@ -20,17 +22,12 @@ api = tweepy.API(auth, wait_on_rate_limit = True, wait_on_rate_limit_notify = Tr
 # Returns tweets that match a specified query. rpp is the # of tweets to return per page
 cursor = lambda term: tweepy.Cursor(api.search, q = term, rpp = 100)
 
-# candidates
-dt = u'Donald Trump'
-bs = u'Bernie Sanders'
-hc = u'Hillary Clinton'
-jb = u'Jeb Bush'
+def tweet_to_dict_spam(tweet, candidate):
 
-candidates = [dt, bs, hc, jb]
+    # Check for Twitter-SpamBot
+    bot = SpamBotDetection()
 
-
-def tweet_to_dict(tweet, candidate):
-    return {
+    dict = {
         'candidate': candidate,
         'id': tweet.id,
         'coordinates': tweet.coordinates,
@@ -52,6 +49,23 @@ def tweet_to_dict(tweet, candidate):
         'user_description': tweet.user.description
     }
 
+    # assign tweet values to variables
+    u_c_a = tweet.user.created_at
+    u_s_c = tweet.user.statuses_count
+    u_r = float(tweet.user.followers_count) / float(tweet.user.friends_count)
+    u_d = tweet.user.description
+
+    # check if Twitter user is a spambot
+    if(bot.check_user_date(u_c_a) is False or bot.check_status_count(u_s_c) is False
+       or bot.check_ratio(u_r) is False or bot.check_descript_len(u_d) is False):
+        dict['is_user_spam'] = 'False'
+        return dict
+    else:
+        dict['is_user_spam'] = 'True'
+        return dict
+
+
+# following functions order and arrange tweets as they come in
 
 def tweets_json(tweets):
     return [tweet._json for tweet in tweets]
@@ -69,7 +83,7 @@ if __name__ == '__main__':
 
     # specify the amount of tweets to collect per candidate
     # e.g. ~$ python retrieve.py 100
-    number_per_candidate = 1 #int(sys.argv[1])
+    number_per_candidate = 100 #int(sys.argv[1])
     print(number_per_candidate)
 
     # path to results directory
@@ -81,15 +95,18 @@ if __name__ == '__main__':
     # dictionary for JSON's key:value pairs
     jsons = {}
 
+    # search for specified candidates in tweets
     for candidate in clist:
         print('Searching for ' + candidate)
         tweets = search(cursor, candidate, number_per_candidate)
-        dfs.append(tweets_df(tweets, candidate, tweet_to_dict))
+        dfs.append(tweets_df(tweets, candidate, tweet_to_dict_spam))
         jsons[candidate] = tweets_json(tweets)
 
+    # assign tweets to pandas dataframes
     df = pd.concat(dfs)
     postfix = str(datetime.datetime.now())
 
+    # output results to specified location/directory
     df.to_csv(path+'/results-{}.csv'.format(postfix))
     with open(path+'/results-{}.json'.format(postfix), 'w') as json_file:
         json_file.write(json.dumps(jsons))

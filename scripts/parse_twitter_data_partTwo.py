@@ -4,6 +4,7 @@ import json
 import csv
 from datetime import datetime, timedelta
 from textblob import TextBlob
+from textblob import sentiments
 from elasticsearch import Elasticsearch
 
 
@@ -92,10 +93,10 @@ def parse_json_data(data):
                 #check_if_spambot()
 
                 # Output sentiment polarity
-                #print(tweets.sentiment.polarity)
+                print(tweets.sentiment.polarity)
 
                 # Determine if sentiment is positive, negative, or neutral
-                '''
+
                 if tweets.sentiment.polarity < 0:
                     sentiment = 'negative'
                 elif tweets.sentiment.polarity == 0:
@@ -114,7 +115,7 @@ def parse_json_data(data):
                                "subjectivity": tweets.sentiment.subjectivity,
                                "sentiment": sentiment})
                 return True
-                '''
+
                 #writer.writerow([tweets_encode])
                 #writer.writerow((screen_name, tweet, followers_count, geo, coordinates, places))
                 #print(screen_name)
