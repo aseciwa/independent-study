@@ -7,9 +7,9 @@ import pandas as pd
 import tweepy
 # import sys
 
-from scripts.candidate_list import clist
-from private.private_keys import consumer_key, consumer_secret, access_token, access_token_secret
-from scripts.spam_detection import SpamBotDetection
+from candidate_list import clist
+from private_keys import consumer_key, consumer_secret, access_token, access_token_secret
+from spam_detection import SpamBotDetection
 
 # set authentications keys and tokens from private/private_keys.py
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
@@ -94,8 +94,7 @@ if __name__ == '__main__':
     print(number_per_candidate)
 
     # path to results directory
-    #path = '/path/to/your/results/directory'
-    path = '/Users/alanseciwa/Desktop/TwitterAPI/tweepy-master/results'
+    path = '/path/to/your/results/directory'
 
     # dataframes List
     dfs = []
