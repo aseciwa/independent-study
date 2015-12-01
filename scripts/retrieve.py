@@ -3,24 +3,24 @@ __author__ = 'alanseciwa'
 
 import datetime
 import json
-import sys
 import pandas as pd
 import tweepy
-from textblob import TextBlob
+# import sys
 
-from candidate_list import clist
-from private_keys import consumer_key, consumer_secret, access_token, access_token_secret
-from spam_detection import SpamBotDetection
+from scripts.candidate_list import clist
+from private.private_keys import consumer_key, consumer_secret, access_token, access_token_secret
+from scripts.spam_detection import SpamBotDetection
 
+# set authentications keys and tokens from private/private_keys.py
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 
 # wait_on_rate_limit is set to true so that I could avoid hitting the rate limit
-api = tweepy.API(auth, wait_on_rate_limit = True, wait_on_rate_limit_notify = True)
+t_api = tweepy.API(auth, wait_on_rate_limit = True, wait_on_rate_limit_notify = True)
 
 # anonymous function called term
 # Returns tweets that match a specified query. rpp is the # of tweets to return per page
-cursor = lambda term: tweepy.Cursor(api.search, q = term, rpp = 100)
+cursor = lambda term: tweepy.Cursor(t_api.search, q = term, rpp = 100)
 
 def tweet_to_dict_spam(tweet, candidate):
 
@@ -45,15 +45,21 @@ def tweet_to_dict_spam(tweet, candidate):
         'user_screen_name': tweet.user.screen_name,
         'user_time_zone': tweet.user.time_zone,
         'user_followers_count': tweet.user.followers_count,
-        'user_follower_ratio': float(tweet.user.followers_count) / float(tweet.user.friends_count),
         'user_description': tweet.user.description
     }
 
     # assign tweet values to variables
     u_c_a = tweet.user.created_at
     u_s_c = tweet.user.statuses_count
-    u_r = float(tweet.user.followers_count) / float(tweet.user.friends_count)
     u_d = tweet.user.description
+
+    # catch error: division by zero
+    try:
+        u_r = float(tweet.user.friends_count) / float(tweet.user.followers_count)
+    except ZeroDivisionError:
+        u_r = 0
+
+    dict['user_follower_ratio'] = u_r
 
     # check if Twitter user is a spambot
     if(bot.check_user_date(u_c_a) is False or bot.check_status_count(u_s_c) is False
@@ -83,10 +89,12 @@ if __name__ == '__main__':
 
     # specify the amount of tweets to collect per candidate
     # e.g. ~$ python retrieve.py 100
-    number_per_candidate = 100 #int(sys.argv[1])
+    #number_per_candidate = int(sys.argv[1])
+    number_per_candidate = 2000
     print(number_per_candidate)
 
     # path to results directory
+    #path = '/path/to/your/results/directory'
     path = '/Users/alanseciwa/Desktop/TwitterAPI/tweepy-master/results'
 
     # dataframes List
@@ -104,9 +112,9 @@ if __name__ == '__main__':
 
     # assign tweets to pandas dataframes
     df = pd.concat(dfs)
-    postfix = str(datetime.datetime.now())
+    current_date = str(datetime.datetime.now())
 
     # output results to specified location/directory
-    df.to_csv(path+'/results-{}.csv'.format(postfix))
-    with open(path+'/results-{}.json'.format(postfix), 'w') as json_file:
+    df.to_csv(path+'/results-{}.csv'.format(current_date))
+    with open(path+'/results-{}.json'.format(current_date), 'w') as json_file:
         json_file.write(json.dumps(jsons))

@@ -16,7 +16,7 @@ sns.set_context('talk')
 sns.set_style('darkgrid')
 
 # load captured tweets
-df = load_df('/Users/alanseciwa/Desktop/results.csv')
+df = load_df('/Users/alanseciwa/Desktop/results3.csv')
 
 # See the overall count relating to the keys 
 df.info()
@@ -28,14 +28,15 @@ print(df[['candidate', 'created_at', 'lang', 'place', 'user_followers_count',
 # find polarity of ONLY english words and display the set
 # the textblob function translate() could be used
 english_df = df[df.lang == 'en']
-print(english_df.sort('polarity', ascending=False).head(3)[['candidate', 'polarity', 'subjectivity', 'text']])
-
+english_df.sort('polarity', ascending=False).head(3)[['candidate', 'polarity', 'subjectivity', 'text']]
 
 # Find mean polarity for each candidate by looking at the influenced_polarity. 
 # this takes into account the number of retweets and number of followers
 candidate_group = english_df.groupby('candidate')
 print(candidate_group[['polarity', 'influence', 'influenced_polarity']].mean())
 
+# Look at the influential Tweets about Donald Trump and Bernie Sanders
+'''
 jeb = candidate_group.get_group('Jeb Bush')
 jeb_influence = jeb.sort('influence', ascending=False)
 print('')
@@ -47,6 +48,23 @@ print(jeb_influence[['influence', 'polarity', 'influenced_polarity', 'user_name'
 print('')
 print('-----------')
 print(df[df.user_name == 'Jeb Bush'].groupby('candidate').size())
+'''
+# Trump
+trump = candidate_group.get_group('Donald Trump')
+trump_influence = trump.sort('influence', ascending=False)
+print('--------------')
+print('Donald Trump')
+print('--------------')
+trump_influence[['influence', 'polarity', 'influenced_polarity', 'user_name', 'text', 'created_at']].head(5)
+
+
+# Sanders
+sanders = candidate_group.get_group('Bernie Sanders')
+sanders_influence = sanders.sort('influence', ascending=False)
+print('--------------')
+print('Bernie Sanders')
+print('--------------')
+sanders_influence[['influence', 'polarity', 'influenced_polarity', 'user_name', 'text', 'created_at']].head(5)
 
 # LANGUAGE
 # display who are all twitter from different languages
@@ -70,11 +88,10 @@ s = non_eng_grp.text.agg(np.size)
 s = s.rename(columns={'text': 'count'})
 s_pivot_dis = s.pivot_table(index='lang', columns='candidate', values='count', fill_value=0)
 
-
 plot = sns.heatmap(s_pivot_dis)
-plot.set_title('Number of non-English Tweets by Candidate', family='Ubuntu')
-plot.set_ylabel('language code', family='Ubuntu')
-plot.set_xlabel('candidate', family='Ubuntu')
+plot.set_title('Number of non-English Tweets by Candidate')
+plot.set_ylabel('language code')
+plot.set_xlabel('candidate')
 plot.figure.set_size_inches(12, 7)
 print('')
 print('ending plotting')
@@ -82,9 +99,9 @@ print('ending plotting')
 # Time-influence polarity over time for each candidate
 mean_pol = df.groupby(['candidate', 'created_at']).influenced_polarity.mean()
 plot = mean_pol.unstack('candidate').resample('60min').plot()
-plot.set_title('Influence Polarity Over Time for Candidates', family='Ubuntu')
-plot.set_ylabel('Influence Polarity', family='Ubunut')
-plot.set_xlabel('Time', family='Ubuntu')
+plot.set_title('Influence Polarity Over Time for Candidates')
+plot.set_ylabel('Influence Polarity')
+plot.set_xlabel('Time')
 plot.figure.set_size_inches(15, 9)
 
 # Get top languages
@@ -100,20 +117,23 @@ df['hour'] = df.created_at.apply(lambda datetime: datetime.hour)
 
 for lang_code in top_lang:
     l_df = df[df.lang == lang_code]
-    normalized = l_df.groupby('hour').size() / l_df.lang.count()
-    plot = normalized.plot(label = lang_code)
+    normalized_freq = l_df.groupby('hour').size() / l_df.lang.count()
+    plot = normalized_freq.plot(label = lang_code)
     
-plot.set_title('Tweet Frequency in non-English Languages by hour of day', family='Ubuntu')
-plot.set_ylabel('normilzed frequency', family='Ubuntu')
-plot.set_xlabel('hour of day (UTC)', family='Ubuntu')
+plot.set_title('Tweet Frequency by hour of day')
+plot.set_ylabel('frequency')
+plot.set_xlabel('hr of day')
 plot.legend()
-plot.figure.set_size_inches(15, 9)
+plot.figure.set_size_inches(10, 8)
 
 # find the uniqueness of tweets
-df_of_interest = df[(df.hour == 2) & (df.lang == 'pt')]
+spike_interest = df[(df.hour == 23) & (df.lang == 'in')]
 
-print('Number of tweets:', df_of_interest.text.count())
-print('Number of unique users:', df_of_interest.user_name.unique().size)
+print('Number of tweets:', spike_interest.text.count())
+print('Number of unique users:', spike_interest.user_name.unique().size)
+
+#investigate spike from Indonesia
+spike_interest.text.head(10).unique()
 
 # Find the Timezone of tweets in different locations with Influenced_Polarity
 timez_df = english_df.dropna(subset=['user_time_zone'])
@@ -122,7 +142,7 @@ us_timez_candidate_group = us_timez_df.groupby(['candidate', 'user_time_zone'])
 us_timez_candidate_group.influenced_polarity.mean()
 
 # Graph timezone on a map
-timez_map = cartopy.io.shapereader.Reader("/Users/alanseciwa/Desktop/tz_world_mp.shp")
+timez_map = cartopy.io.shapereader.Reader("/Users/alanseciwa/Desktop/World_Maps/tz_world_mp.shp")
 timez_rec = list(timez_map.records())
 timez_trans = {
     'Eastern Time (US & Canada)': 'America/New_York',
@@ -174,7 +194,7 @@ for i, c in enumerate(candidates):
             alpha = 0.8
         )
     
-    plot.set_title('Influenced Polarity towards {} by U.S. Timezone'.format(c), family='Ubuntu')
+    plot.set_title('Influenced Polarity towards {} by U.S. Timezone'.format(c))
     plot.figure.set_size_inches(7, 4)
     plt.show()
     print() 
@@ -205,10 +225,10 @@ pivot = mean_infl_pol.pivot_table(
 )
 
 plot = sns.heatmap(pivot)
-plot.set_title('Influenced Polarity in Major Foreign (timezones) Cities by Candidate', family='Ubuntu')
+plot.set_title('Influenced Polarity in Major Foreign (timezones) Regions by Candidate')
 plot.set_ylabel('City', family='Ubuntu')
-plot.set_xlabel('Influenced Polarity by Candidate', family='Ubuntu')
-plot.figure.set_size_inches(15, 9)
+plot.set_xlabel('Influenced Polarity by Candidate')
+plot.figure.set_size_inches(10, 9)
 
 # Find the Geolocation of Tweets made
 geo_df = df.dropna(subset=['place'])
@@ -227,5 +247,34 @@ plot.scatter(
     zorder=2
 )
 
-plot.set_title('International Twitter Users W/Enabled Geo Data', family='Ubuntu')
+plot.set_title('International Twitter Users W/Enabled Geo Data')
 plot.figure.set_size_inches(14, 9)
+
+# Plot Twitter user in the US
+plot = plt.axes(projection=aea)
+
+plot.set_extent((-150, 60, -25, 60))
+
+plot.add_feature(state_province, edgecolor='black')
+plot.add_feature(cartopy.feature.COASTLINE)
+plot.add_feature(cartopy.feature.LAND)
+plot.add_feature(cartopy.feature.BORDERS)
+plot.add_feature(cartopy.feature.LAKES)
+
+candidate_grp2 = geo_df.groupby('candidate', as_index = False)
+
+colors = ['#DC143C', '#0000FF', '#FFD700', '#9932CC']
+for i, (can, grp) in enumerate(candidate_grp2):
+    longitudes = grp.longitude.values
+    latitudes = grp.latitude.values
+    plot.scatter(
+        longitudes, 
+        latitudes, 
+        transform=pc, 
+        color=colors[i], 
+        label=can,
+        zorder=2
+    )
+plot.set_title('Twitter Users by Candidate')
+plt.legend(loc='lower right')
+plot.figure.set_size_inches(12, 7)
