@@ -253,8 +253,11 @@ plot.figure.set_size_inches(14, 9)
 # Plot Twitter user in the US
 plot = plt.axes(projection=aea)
 
+## this set the size of the map. If other portions of the 
+## map need to be accessed, the these coordinates
 plot.set_extent((-150, 60, -25, 60))
 
+# <fix> need to fix, state border lines are not showing
 plot.add_feature(state_province, edgecolor='black')
 plot.add_feature(cartopy.feature.COASTLINE)
 plot.add_feature(cartopy.feature.LAND)
@@ -263,7 +266,10 @@ plot.add_feature(cartopy.feature.LAKES)
 
 candidate_grp2 = geo_df.groupby('candidate', as_index = False)
 
+# Colors for the legend table
 colors = ['#DC143C', '#0000FF', '#FFD700', '#9932CC']
+
+# Go through loop to display the coordinates 
 for i, (can, grp) in enumerate(candidate_grp2):
     longitudes = grp.longitude.values
     latitudes = grp.latitude.values
