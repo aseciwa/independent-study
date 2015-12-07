@@ -3,14 +3,14 @@ Sentiment Analysis using Python
 
 Required Packages
 -----------------
-Pandas
-Numpy
-Matplotlib
-Seaborn
-Cartopy
-Tweepy (important) 
-TextBlob
-NLTK
+1. Pandas
+2. Numpy
+3. Matplotlib
+4. Seaborn
+5. Cartopy
+6. Tweepy (important) 
+7. TextBlob
+8. NLTK
 
 Suggested IDE
 --------------
@@ -62,4 +62,4 @@ Make sure you the PYTHONPATH manager is pointing to the following:
 	2. Seaborn
 	3. Tweepy
 	4. candidate_list, private_keys, spam_detection
-	>> if this does not work, copy and paste the library to ~/3.4/lib/python3.4/site-packages/
+	>> if this does not work, copy and paste the libraries to ~/3.4/lib/python3.4/site-packages/
