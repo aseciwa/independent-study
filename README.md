@@ -1,11 +1,23 @@
-Tweepy: Twitter for Python!
+Sentiment Analysis using Python 
 ======
 
-[![Join the chat at https://gitter.im/tweepy/tweepy](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tweepy/tweepy?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](http://img.shields.io/travis/tweepy/tweepy/master.svg?style=flat)](https://travis-ci.org/tweepy/tweepy)
-[![Documentation Status](http://img.shields.io/badge/docs-v3.1.0-brightgreen.svg?style=flat)](http://docs.tweepy.org)
-[![Downloads](http://img.shields.io/pypi/dm/tweepy.svg?style=flat)](https://crate.io/packages/tweepy) [![Version](http://img.shields.io/pypi/v/tweepy.svg?style=flat)](https://crate.io/packages/tweepy)
-[![Coverage Status](https://img.shields.io/coveralls/tweepy/tweepy/master.svg?style=flat)](https://coveralls.io/r/tweepy/tweepy?branch=master)
+Required Packages
+-----------------
+Pandas
+Numpy
+Matplotlib
+Seaborn
+Cartopy
+Tweepy (important) 
+TextBlob
+NLTK
+
+Suggested IDE
+--------------
+[Anaconda (Spyder)](https://www.continuum.io/downloads)
+
+** IPython should be install with the Anaconda package
+
 
 Installation
 ------------
@@ -23,12 +35,31 @@ Github and install it manually:
 
 Python 2.6 and 2.7, 3.3 & 3.4 are supported.
 
-Documentation
--------------
-  - [Website (Work in-progress)](http://tweepy.github.com/)
-  - [Twitter Developers](http://dev.twitter.com/)
+Seaborn
+	
+	pip install seaborn
+	
+Cartopy
+	
+	pip install cartopy
+	
+TextBlob
 
-Community
----------
-  - [Discussion Forum](http://discuss.tweepy.org)
-  - IRC Chat (Freenode.net #tweepy)
+	pip install textblob
+	
+NLTK
+	
+	pip install nltk
+	
+** Pandas, Numpy, Matplotlib will be installed with Anaconda 
+
+Setup
+-----
+
+Make sure you the PYTHONPATH manager is pointing to the following:
+
+	1. TextBlob
+	2. Seaborn
+	3. Tweepy
+	4. candidate_list, private_keys, spam_detection
+	>> if this does not work, copy and paste the library to ~/3.4/lib/python3.4/site-packages/
