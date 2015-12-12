@@ -21,15 +21,8 @@ Suggested IDE
 
 Installation
 ------------
-The easiest way to install the latest version
-is by using pip/easy_install to pull it from PyPI:
+Install Tweepy manually:
 
-    pip install tweepy
-
-You may also use Git to clone the repository from
-Github and install it manually:
-
-    git clone https://github.com/tweepy/tweepy.git
     cd tweepy
     python setup.py install
 
